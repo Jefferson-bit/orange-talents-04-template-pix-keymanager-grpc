@@ -9,12 +9,53 @@ package br.com.zup.jefferson;
 
 service PixService {
   rpc send (PixRequest) returns (PixReply) {}
+
+  rpc cadastra(RegistraChavePixRequest) returns (RegistraChavePixResponse){}
+
+  rpc remove(RemoveChavePixRequest) returns (RemoveChavePixResponse){}
+
 }
+
+enum TipoDeChave{
+  DESCONHECIDO_CHAVE = 0;
+  CPF = 1;
+  EMAIL = 2;
+  NUMERO_CELULAR = 3;
+  CHAVE_ALEATORIA = 4;
+}
+
+enum TipoDeConta {
+  DESCONHECIDO_CONTA = 0;
+  CONTA_CORRENTE = 1;
+  CONTA_POUPANCA = 2;
+}
+
+message RegistraChavePixRequest {
+  string idCliente = 1;
+  TipoDeConta tipoDeConta = 2;
+  TipoDeChave tipoDeChave = 3;
+  string chavePix = 4;
+}
+
+message RegistraChavePixResponse{
+  string pixId = 1;
+  string chavePix = 2;
+}
+
 
 message PixRequest {
   string name = 1;
 }
 
 message PixReply {
+  string message = 1;
+}
+
+message  RemoveChavePixRequest{
+    string pixId = 1;
+    string chavePix = 2;
+}
+
+message RemoveChavePixResponse{
   string message = 1;
 }
