@@ -8,12 +8,11 @@ option objc_class_prefix = "HLW";
 package br.com.zup.jefferson;
 
 service PixService {
-  rpc send (PixRequest) returns (PixReply) {}
-
   rpc cadastra(RegistraChavePixRequest) returns (RegistraChavePixResponse){}
+}
 
+service RemoveChavePixService{
   rpc remove(RemoveChavePixRequest) returns (RemoveChavePixResponse){}
-
 }
 
 enum TipoDeChave{
@@ -42,20 +41,13 @@ message RegistraChavePixResponse{
   string chavePix = 2;
 }
 
-
-message PixRequest {
-  string name = 1;
-}
-
-message PixReply {
-  string message = 1;
-}
-
 message  RemoveChavePixRequest{
-    string pixId = 1;
+    string idCliente = 1;
     string chavePix = 2;
 }
 
 message RemoveChavePixResponse{
   string message = 1;
+  string idCliente = 2;
+  string chavePix = 3;
 }

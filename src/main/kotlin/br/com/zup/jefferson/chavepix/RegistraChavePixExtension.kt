@@ -1,6 +1,7 @@
 package br.com.zup.jefferson.chavepix
 
 import br.com.zup.jefferson.RegistraChavePixRequest
+import br.com.zup.jefferson.RemoveChavePixRequest
 import br.com.zup.jefferson.TipoDeChave.DESCONHECIDO_CHAVE
 import br.com.zup.jefferson.TipoDeConta.DESCONHECIDO_CONTA
 

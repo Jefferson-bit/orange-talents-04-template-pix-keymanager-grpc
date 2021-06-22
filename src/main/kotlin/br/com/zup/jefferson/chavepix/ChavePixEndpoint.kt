@@ -1,8 +1,7 @@
 package br.com.zup.jefferson.chavepix
 
-import br.com.zup.jefferson.PixServiceGrpc
-import br.com.zup.jefferson.RegistraChavePixRequest
-import br.com.zup.jefferson.RegistraChavePixResponse
+import br.com.zup.jefferson.*
+import br.com.zup.jefferson.chavepix.remove.RemoveChavePixService
 import br.com.zup.jefferson.utils.interceptor.InterceptorErrorAdvice
 import io.grpc.stub.StreamObserver
 import javax.inject.Inject
@@ -11,15 +10,12 @@ import javax.inject.Singleton
 
 @InterceptorErrorAdvice
 @Singleton
-class ChavePixEndpoint(
-    @Inject val service: ChavePixService
-
-) : PixServiceGrpc.PixServiceImplBase() {
+class ChavePixEndpoint(@Inject val service: ChavePixService)
+    : PixServiceGrpc.PixServiceImplBase() {
 
     override fun cadastra(
         request: RegistraChavePixRequest?,
-        responseObserver: StreamObserver<RegistraChavePixResponse>?,
-    ) {
+        responseObserver: StreamObserver<RegistraChavePixResponse>?, ) {
 
         val chavePix = request!!.toModel()
         val pixService = service.salvaChavePix(chavePix)
@@ -33,5 +29,4 @@ class ChavePixEndpoint(
         responseObserver.onCompleted()
 //        val sincronizedManager: SynchronousTransactionManager<Any>,
     }
-
 }

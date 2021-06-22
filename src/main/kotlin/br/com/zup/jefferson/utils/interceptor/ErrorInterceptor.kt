@@ -1,6 +1,7 @@
 package br.com.zup.jefferson.utils.interceptor
 
 import br.com.zup.jefferson.utils.exception.ChavePixAlreadyExistsException
+import br.com.zup.jefferson.utils.exception.ChavePixNotFoundException
 import com.google.rpc.BadRequest
 import com.google.rpc.Code
 import io.grpc.Status
@@ -23,6 +24,8 @@ class ErrorInterceptor : MethodInterceptor<Any, Any>{
              context.proceed()
         }catch (e: Exception){
             val error = when(e){
+                is ChavePixNotFoundException -> Status.NOT_FOUND.withCause(e)
+                    .withDescription(e.message).asRuntimeException()
                 is IllegalStateException -> Status.FAILED_PRECONDITION.withCause(e)
                     .withDescription(e.message).asRuntimeException()
                 is ChavePixAlreadyExistsException -> Status.ALREADY_EXISTS.withDescription(e.message)

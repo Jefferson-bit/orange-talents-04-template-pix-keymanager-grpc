@@ -1,10 +1,12 @@
 package br.com.zup.jefferson.utils
 
 import javax.validation.Constraint
+import javax.validation.Payload
 import javax.validation.ReportAsSingleViolation
 import javax.validation.constraints.Pattern
 import kotlin.annotation.AnnotationRetention.RUNTIME
 import kotlin.annotation.AnnotationTarget.*
+import kotlin.reflect.KClass
 
 @ReportAsSingleViolation
 @Constraint(validatedBy = [])
@@ -12,4 +14,7 @@ import kotlin.annotation.AnnotationTarget.*
     flags = [Pattern.Flag.CASE_INSENSITIVE])
 @Retention(RUNTIME)
 @Target(FIELD, CONSTRUCTOR, PROPERTY, VALUE_PARAMETER)
-annotation class ValidUUID
+annotation class ValidUUID(val message: String = "chavePix invalida (\${validatedValue.tipo})",
+                           val groups: Array<KClass<Any>> = [],
+                           val payload: Array<KClass<Payload>> = [],
+)
