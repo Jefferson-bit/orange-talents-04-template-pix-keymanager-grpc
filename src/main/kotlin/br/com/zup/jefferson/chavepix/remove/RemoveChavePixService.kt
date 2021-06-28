@@ -11,7 +11,6 @@ import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 import javax.transaction.Transactional
-import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 
 @Validated
@@ -23,13 +22,12 @@ class RemoveChavePixService(
 
     @Transactional
     fun removeChavePix(
-
         @NotBlank @ValidUUID(message = "Formato UUID cliente invalido") idCliente: String?,
-        @NotBlank chavePix: String?,
+        @NotBlank pixId: String?,
     ) {
         val uuidCliente = UUID.fromString(idCliente)
 
-        val chavePix = repository.findByIdClienteAndChavePix(idCliente = uuidCliente, chavePix = chavePix)
+        val chavePix = repository.findByIdClienteAndPixId(idCliente = uuidCliente, pixId = pixId)
             .orElseThrow { ChavePixNotFoundException("Chave não encontrada ou não pertence ao requisitante") }
         repository.delete(chavePix)
 

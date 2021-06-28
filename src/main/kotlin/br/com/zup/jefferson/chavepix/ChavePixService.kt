@@ -1,11 +1,7 @@
 package br.com.zup.jefferson.chavepix
 
-import br.com.zup.jefferson.enums.AccountType
-import br.com.zup.jefferson.enums.KeyType
-import br.com.zup.jefferson.enums.TipoDeChave
 import br.com.zup.jefferson.sistemaexterno.BcbClient
 import br.com.zup.jefferson.sistemaexterno.ChavePixToCreatePixKeyRequestConvert
-import br.com.zup.jefferson.sistemaexterno.CreatePixKeyRequest
 import br.com.zup.jefferson.sistemaexterno.ItauClient
 import br.com.zup.jefferson.utils.exception.ChavePixAlreadyExistsException
 import io.micronaut.http.HttpStatus

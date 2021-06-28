@@ -30,10 +30,10 @@ class ChavePixToCreatePixKeyRequestConvert{
                 participant = Conta.ITAU_UNIBANCO_SA_ISPB,
                 branch = chave.conta.agencia,
                 accountNumber = chave.conta.numeroDaConta,
-                accountType = accountType[chave.tipoDeConta]!!.tipoContaForAccountType(tipo = chave.tipoDeConta!!)!!
+                accountType = accountType[chave.tipoDeConta]!!.tipoContaForAccountType(tipo = chave.tipoDeConta!!)
             ),
             owner = Owner(
-                type = OwnerType.NATURAL_PERSON, //observação
+                type = OwnerType.NATURAL_PERSON,
                 name = chave.conta.nomeTitular,
                 taxIdNumber = chave.conta.cpfTitular
             )
@@ -84,7 +84,7 @@ data class PixKeyDetailsResponse(
 
     fun toModel() : ChavePixResponse{
         return ChavePixResponse(
-            tipo = keyType.domainType,
+            tipoDeChave = keyType.domainType,
             chavePix = key,
             tipoDeConta = when(this.bankAccount.accountType){
                 AccountType.CACC -> TipoDeConta.CONTA_CORRENTE
@@ -98,7 +98,5 @@ data class PixKeyDetailsResponse(
                 cpfTitular = owner.taxIdNumber
             )
         )
-
     }
-
 }

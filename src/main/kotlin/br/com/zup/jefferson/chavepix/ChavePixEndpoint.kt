@@ -1,7 +1,6 @@
 package br.com.zup.jefferson.chavepix
 
 import br.com.zup.jefferson.*
-import br.com.zup.jefferson.chavepix.remove.RemoveChavePixService
 import br.com.zup.jefferson.utils.interceptor.InterceptorErrorAdvice
 import io.grpc.stub.StreamObserver
 import javax.inject.Inject

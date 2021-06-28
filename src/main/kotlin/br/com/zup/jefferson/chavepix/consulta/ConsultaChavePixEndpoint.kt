@@ -1,23 +1,28 @@
 package br.com.zup.jefferson.chavepix.consulta
 
 import br.com.zup.jefferson.*
+import br.com.zup.jefferson.chavepix.PixRepository
+import br.com.zup.jefferson.sistemaexterno.BcbClient
 import br.com.zup.jefferson.utils.interceptor.InterceptorErrorAdvice
 import com.google.protobuf.Timestamp
 import io.grpc.stub.StreamObserver
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @InterceptorErrorAdvice
 @Singleton
 class ConsultaChavePixEndpoint(
-    @Inject val service: ConsultaChavePixService
+    @Inject val pixRepository: PixRepository,
+    @Inject val bcbClient: BcbClient
 ) : ConsultaDadosChavePixServiceGrpc.ConsultaDadosChavePixServiceImplBase(){
 
-    override fun consulta(request: ConsultaPixRequest?, responseObserver: StreamObserver<ConsultaPixResonse>?) {
-        val chavePix = request!!.chavePix
-        val consultaChavePix = service.consultaChavePix(chavePix)
+    override fun consulta(request: ConsultaPixRequest?, responseObserver: StreamObserver<ConsultaPixResponse>?) {
+
+        val request = request!!.toModel()
+        val serviceResponse = request.consulta(pixRepository = pixRepository, bcbClient = bcbClient)
 
         val instant = LocalDateTime.now().atZone(ZoneId.of("UTC")).toInstant()
 
@@ -26,18 +31,22 @@ class ConsultaChavePixEndpoint(
             .setSeconds(instant.epochSecond)
             .build()
 
-        val response = ConsultaPixResonse.newBuilder()
-            .setChavePix(consultaChavePix!!.chavePix)
-            .setNome(consultaChavePix.conta.nomeTitular)
-            .setCpf(consultaChavePix.conta.cpfTitular)
-            .setTipoDeChave(TipoDeChave.valueOf(consultaChavePix.tipo!!.name))
-            .addConta(ConsultaPixResonse.Conta.newBuilder()
-                .setInstituicao(consultaChavePix.conta.instituicao)
-                .setAgencia(consultaChavePix.conta.agencia)
-                .setNumero(consultaChavePix.conta.numeroDaConta)
-                .setTipoDeConta(TipoDeConta.valueOf(consultaChavePix.tipoDeConta.name))
+        val response = ConsultaPixResponse.newBuilder()
+            .setClienteId(serviceResponse.clienteId?.toString() ?: "")
+            .setPixId(serviceResponse.pixId ?: "")
+            .setChave(ConsultaPixResponse.ChavePix.newBuilder()
+                .setChavePix(serviceResponse.chavePix)
+                .setTipoDeChave(TipoDeChave.valueOf(serviceResponse.tipoDeChave!!.name))
+                .setCreateAt(createAt)
+                .setConta(ConsultaPixResponse.ChavePix.Conta.newBuilder()
+                    .setInstituicao(serviceResponse.conta.instituicao)
+                    .setAgencia(serviceResponse.conta.agencia)
+                    .setNome(serviceResponse.conta.nomeTitular)
+                    .setCpf(serviceResponse.conta.cpfTitular)
+                    .setNumero(serviceResponse.conta.numeroDaConta)
+                    .setTipoDeConta(TipoDeConta.valueOf(serviceResponse.tipoDeConta.name))
+                    .build())
                 .build())
-            .setCreateAt(createAt)
             .build()
 
         responseObserver!!.onNext(response)

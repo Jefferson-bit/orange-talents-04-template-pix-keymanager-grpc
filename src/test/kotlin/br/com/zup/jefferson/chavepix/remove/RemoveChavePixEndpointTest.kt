@@ -86,13 +86,13 @@ internal class RemoveChavePixEndpointTest(
 
         request = RemoveChavePixRequest.newBuilder()
             .setIdCliente(chaveExistente.idCliente.toString())
-            .setChavePix(chaveExistente.chavePix)
+            .setPixId(chaveExistente.pixId)
 
             .build()
 
         val response = grpcClientRemove.remove(request)
 
-        assertEquals(chaveExistente.chavePix, response.chavePix)
+        assertEquals(chaveExistente.pixId, response.pixId)
         assertEquals(chaveExistente.idCliente.toString(), response.idCliente)
     }
 
@@ -101,7 +101,7 @@ internal class RemoveChavePixEndpointTest(
         val chavePixInexistente = "matheus@gmail.com"
         request = RemoveChavePixRequest.newBuilder()
             .setIdCliente(chaveExistente.idCliente.toString())
-            .setChavePix(chavePixInexistente)
+            .setPixId(chavePixInexistente)
             .build()
 
         val error = assertThrows<StatusRuntimeException>() {
@@ -116,7 +116,7 @@ internal class RemoveChavePixEndpointTest(
     fun `deveria retornar not found quando id cliente nao existir `() {
         request = RemoveChavePixRequest.newBuilder()
             .setIdCliente(UUID.randomUUID().toString())
-            .setChavePix(chaveExistente.chavePix)
+            .setPixId(chaveExistente.chavePix)
             .build()
 
         val error = assertThrows<StatusRuntimeException>() {
@@ -148,7 +148,7 @@ internal class RemoveChavePixEndpointTest(
 
         request = RemoveChavePixRequest.newBuilder()
             .setIdCliente(chaveExistente.idCliente.toString())
-            .setChavePix(chaveExistente.chavePix)
+            .setPixId(chaveExistente.pixId)
             .build()
         val error = assertThrows<StatusRuntimeException>() {
             grpcClientRemove.remove(request)

@@ -8,6 +8,5 @@ import java.util.*
 interface PixRepository : JpaRepository<ChavePix, String> {
 
     fun existsByChavePix(chavePix: String) : Boolean
-    fun findByChavePix(chavePix: String?): Optional<ChavePix>
-    fun findByIdClienteAndChavePix(idCliente: UUID?, chavePix: String?): Optional<ChavePix>
+    fun findByIdClienteAndPixId(idCliente: UUID?, pixId: String?): Optional<ChavePix>
 }

@@ -15,10 +15,10 @@ class RemoveChavePixEndpoint(@Inject val service: RemoveChavePixService)
     : RemoveChavePixServiceGrpc.RemoveChavePixServiceImplBase() {
 
     override fun remove(request: RemoveChavePixRequest?, responseObserver: StreamObserver<RemoveChavePixResponse>?) {
-        service.removeChavePix(request!!.idCliente, request.chavePix)
+        service.removeChavePix(request!!.idCliente, request.pixId)
 
         val response = RemoveChavePixResponse.newBuilder()
-            .setChavePix(request.chavePix)
+            .setPixId(request.pixId)
             .setIdCliente(request.idCliente)
             .setMessage(Status.OK
                 .withDescription("Chave excluida com sucesso").description)

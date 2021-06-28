@@ -47,35 +47,5 @@ enum class KeyType(val domainType: TipoDeChave?) {
     };
 
     abstract fun convertTipoChaveForKeyType(tipoDeChave: TipoDeChave?) : KeyType?
-    companion object {
-        fun bla(tipoDeChave: TipoDeChave?) :KeyType {
-            val associateBy = KeyType.values().associateBy(KeyType::domainType)
-            return associateBy[tipoDeChave]!!
-        }
-    }
 
-//    CPF(TipoDeChave.CPF),
-//    CNPJ(null),
-//    EMAIL(TipoDeChave.EMAIL),
-//    PHONE(TipoDeChave.NUMERO_CELULAR),
-//    RANDOM(TipoDeChave.CHAVE_ALEATORIA);
-//
-//    companion object {
-//        private val mapping = values().associateBy(KeyType::domainType)
-//        fun by(domainType: TipoDeChave?): KeyType {
-//            return mapping[domainType] ?: throw IllegalArgumentException("Argumento invalido")
-//
-//        }
-//    }
-
-//    companion object {
-//        fun converteTipoDominioParaKeyType() = mapOf(
-//            Pair(TipoDeChave.CHAVE_ALEATORIA, KeyType.RANDOM),
-//            Pair(TipoDeChave.CPF, KeyType.CPF),
-//            Pair(TipoDeChave.NUMERO_CELULAR, KeyType.PHONE),
-//            Pair(TipoDeChave.EMAIL, KeyType.EMAIL),
-//            null to CNPJ
-//        )
-//
-//    }
 }

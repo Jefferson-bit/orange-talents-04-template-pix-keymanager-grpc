@@ -13,7 +13,7 @@ interface BcbClient {
         produces = [MediaType.APPLICATION_XML] )
     fun cadastraChavePixNoBcb(@Body createPixKeyRequest: CreatePixKeyRequest) : HttpResponse<CreatePixKeyResponse>
 
-    @Delete( value = "/api/v1/pix/keys/{keys}/",
+    @Delete( value = "/api/v1/pix/keys/{keys}",
         consumes =  [MediaType.APPLICATION_XML],
         produces = [MediaType.APPLICATION_XML] )
     fun deletaChavePixNoBcb( @PathVariable keys: String ,@Body deletePixKeyRequest: DeletePixKeyRequest) : HttpResponse<DeletePixKeyResponse>
