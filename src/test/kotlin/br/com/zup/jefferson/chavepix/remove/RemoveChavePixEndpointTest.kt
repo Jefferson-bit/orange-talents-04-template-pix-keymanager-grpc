@@ -2,31 +2,48 @@ package br.com.zup.jefferson.chavepix.remove
 
 import br.com.zup.jefferson.RemoveChavePixRequest
 import br.com.zup.jefferson.RemoveChavePixServiceGrpc
-import br.com.zup.jefferson.chavepix.*
+import br.com.zup.jefferson.chavepix.ChavePix
+import br.com.zup.jefferson.chavepix.Conta
+import br.com.zup.jefferson.chavepix.PixRepository
+import br.com.zup.jefferson.enums.TipoDeChave
+import br.com.zup.jefferson.enums.TipoDeConta
+import br.com.zup.jefferson.sistemaexterno.BcbClient
+import br.com.zup.jefferson.sistemaexterno.DeletePixKeyRequest
+import br.com.zup.jefferson.sistemaexterno.DeletePixKeyResponse
 import io.grpc.Channel
 import io.grpc.Status
 import io.grpc.StatusRuntimeException
 import io.micronaut.context.annotation.Bean
 import io.micronaut.context.annotation.Factory
+import io.micronaut.context.annotation.Replaces
 import io.micronaut.grpc.annotation.GrpcChannel
 import io.micronaut.grpc.server.GrpcServerChannel
+import io.micronaut.http.HttpResponse
+import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import org.mockito.Mockito
+import java.time.LocalDateTime
 import java.util.*
 import javax.inject.Inject
 
 @MicronautTest(transactional = false)
 internal class RemoveChavePixEndpointTest(
     @Inject val repository: PixRepository,
-    @Inject val grpcClientRemove: RemoveChavePixServiceGrpc.RemoveChavePixServiceBlockingStub
+    @Inject val grpcClientRemove: RemoveChavePixServiceGrpc.RemoveChavePixServiceBlockingStub,
 ) {
 
     lateinit var request: RemoveChavePixRequest
     lateinit var chaveExistente: ChavePix
+
+    @field:Inject
+    lateinit var bcbClient: BcbClient
+    lateinit var deletePixKeyRequest: DeletePixKeyRequest
+    lateinit var deletePixKeyResponse: DeletePixKeyResponse
 
     @BeforeEach
     internal fun setUp() {
@@ -44,6 +61,19 @@ internal class RemoveChavePixEndpointTest(
             chavePix = "yuri@gmail.com",
             conta = conta)
         repository.save(chaveExistente)
+
+        deletePixKeyRequest = DeletePixKeyRequest(
+            chaveExistente.chavePix!!,
+            participant = "60701190"
+        )
+        deletePixKeyResponse = DeletePixKeyResponse(
+            deletePixKeyRequest.key,
+            participant = "60701190",
+            deletedAt = LocalDateTime.now()
+        )
+
+        Mockito.`when`(bcbClient.deletaChavePixNoBcb(deletePixKeyRequest.key, deletePixKeyRequest))
+            .thenReturn(HttpResponse.ok(deletePixKeyResponse))
     }
 
     @AfterEach
@@ -52,11 +82,12 @@ internal class RemoveChavePixEndpointTest(
     }
 
     @Test
-    fun `deveria excluir chave pix`(){
+    fun `deveria excluir chave pix`() {
 
         request = RemoveChavePixRequest.newBuilder()
             .setIdCliente(chaveExistente.idCliente.toString())
             .setChavePix(chaveExistente.chavePix)
+
             .build()
 
         val response = grpcClientRemove.remove(request)
@@ -66,7 +97,7 @@ internal class RemoveChavePixEndpointTest(
     }
 
     @Test
-    fun `deveria retornar not found quando chave pix nao existir `(){
+    fun `deveria retornar not found quando chave pix nao existir `() {
         val chavePixInexistente = "matheus@gmail.com"
         request = RemoveChavePixRequest.newBuilder()
             .setIdCliente(chaveExistente.idCliente.toString())
@@ -82,7 +113,7 @@ internal class RemoveChavePixEndpointTest(
     }
 
     @Test
-    fun `deveria retornar not found quando id cliente nao existir `(){
+    fun `deveria retornar not found quando id cliente nao existir `() {
         request = RemoveChavePixRequest.newBuilder()
             .setIdCliente(UUID.randomUUID().toString())
             .setChavePix(chaveExistente.chavePix)
@@ -97,7 +128,7 @@ internal class RemoveChavePixEndpointTest(
     }
 
     @Test
-    fun `deveria retornar invalid argument quando chave pix e id cliente nao for informado ou formato UUID for invalido`(){
+    fun `deveria retornar invalid argument quando chave pix e id cliente nao for informado ou formato UUID for invalido`() {
         request = RemoveChavePixRequest.newBuilder().build()
 
         val error = assertThrows<StatusRuntimeException>() {
@@ -105,7 +136,30 @@ internal class RemoveChavePixEndpointTest(
         }
 
         assertEquals(Status.INVALID_ARGUMENT.code, error.status.code)
+        assertEquals("Parametro Invalido", error.status.description)
 
+    }
+
+    @Test
+    fun `deveria retornar failed precondition quando o banco do brasil retornar um status diferente de 200 ok`() {
+
+        Mockito.`when`(bcbClient.deletaChavePixNoBcb(deletePixKeyRequest.key, deletePixKeyRequest))
+            .thenReturn(HttpResponse.created(deletePixKeyResponse))
+
+        request = RemoveChavePixRequest.newBuilder()
+            .setIdCliente(chaveExistente.idCliente.toString())
+            .setChavePix(chaveExistente.chavePix)
+            .build()
+        val error = assertThrows<StatusRuntimeException>() {
+            grpcClientRemove.remove(request)
+        }
+        assertEquals(Status.FAILED_PRECONDITION.code, error.status.code)
+        assertEquals("Falha ao remover chave pix no banco do brasil", error.status.description)
+    }
+
+    @MockBean(BcbClient::class)
+    fun bcbClienteMock(): BcbClient {
+        return Mockito.mock(BcbClient::class.java)
     }
 
 }
@@ -113,6 +167,7 @@ internal class RemoveChavePixEndpointTest(
 @Factory
 class ClientFactory {
     @Bean
+    @Replaces
     fun stub(@GrpcChannel(GrpcServerChannel.NAME) channel: Channel): RemoveChavePixServiceGrpc.RemoveChavePixServiceBlockingStub {
         return RemoveChavePixServiceGrpc.newBlockingStub(channel)
     }

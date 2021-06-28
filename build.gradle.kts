@@ -38,6 +38,8 @@ dependencies {
     implementation("io.micronaut:micronaut-validation")
     implementation ("org.hibernate.validator:hibernate-validator:6.2.0.Final")
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("io.micronaut.xml:micronaut-jackson-xml")
+
 
     runtimeOnly ("org.postgresql:postgresql:42.2.21")
     implementation("io.micronaut.sql:micronaut-jdbc-hikari")

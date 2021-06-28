@@ -1,4 +1,4 @@
-package br.com.zup.jefferson.chavepix
+package br.com.zup.jefferson.enums
 
 enum class TipoDeConta () {
     CONTA_CORRENTE,

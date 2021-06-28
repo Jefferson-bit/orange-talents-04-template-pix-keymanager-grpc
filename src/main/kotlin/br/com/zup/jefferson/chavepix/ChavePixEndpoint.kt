@@ -7,7 +7,6 @@ import io.grpc.stub.StreamObserver
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
 @InterceptorErrorAdvice
 @Singleton
 class ChavePixEndpoint(@Inject val service: ChavePixService)

@@ -14,9 +14,8 @@ import javax.inject.Singleton
 class RemoveChavePixEndpoint(@Inject val service: RemoveChavePixService)
     : RemoveChavePixServiceGrpc.RemoveChavePixServiceImplBase() {
 
-
     override fun remove(request: RemoveChavePixRequest?, responseObserver: StreamObserver<RemoveChavePixResponse>?) {
-        service.removeChavePix(request!!.idCliente, request?.chavePix)
+        service.removeChavePix(request!!.idCliente, request.chavePix)
 
         val response = RemoveChavePixResponse.newBuilder()
             .setChavePix(request.chavePix)

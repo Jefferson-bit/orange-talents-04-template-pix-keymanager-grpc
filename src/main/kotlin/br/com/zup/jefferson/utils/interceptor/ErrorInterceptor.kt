@@ -1,5 +1,6 @@
 package br.com.zup.jefferson.utils.interceptor
 
+import br.com.zup.jefferson.enums.AccountType
 import br.com.zup.jefferson.utils.exception.ChavePixAlreadyExistsException
 import br.com.zup.jefferson.utils.exception.ChavePixNotFoundException
 import com.google.rpc.BadRequest

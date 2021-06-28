@@ -1,7 +1,12 @@
 package br.com.zup.jefferson.chavepix
+import br.com.zup.jefferson.enums.TipoDeChave
+import br.com.zup.jefferson.enums.TipoDeConta
+import br.com.zup.jefferson.sistemaexterno.CreatePixKeyRequest
 import org.hibernate.annotations.GenericGenerator
 import java.util.*
 import javax.persistence.*
+import javax.validation.constraints.NotBlank
+import javax.validation.constraints.NotNull
 
 @Entity
 class ChavePix(
@@ -13,40 +18,31 @@ class ChavePix(
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     val tipoDeChave: TipoDeChave?,
-    @Column(nullable = false)
-    val chavePix: String?,
+    var chavePix: String?,
     @Embedded
     val conta: Conta
 ) {
-
-
 
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator",)
     var pixId: String? = null
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as ChavePix
-
-        if (idCliente != other.idCliente) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        return idCliente.hashCode()
+    fun atualizaChavePix(chavePix: String?){
+        this.chavePix = chavePix
     }
 }
 
 @Embeddable
 class Conta(
-    val instituicao: String,
-    val agencia: String,
-    val numeroDaConta: String,
-    val nomeTitular: String,
-    val cpfTitular: String
-) {}
+    @field:NotBlank val instituicao: String,
+    @field:NotBlank val agencia: String,
+    @field:NotBlank val numeroDaConta: String,
+    @field:NotBlank val nomeTitular: String,
+    @field:NotBlank val cpfTitular: String
+
+) {
+    companion object{
+        val  ITAU_UNIBANCO_SA_ISPB = "60701190"
+    }
+}

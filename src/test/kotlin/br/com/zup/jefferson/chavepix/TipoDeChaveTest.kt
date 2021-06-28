@@ -1,5 +1,6 @@
 package br.com.zup.jefferson.chavepix
 
+import br.com.zup.jefferson.enums.TipoDeChave
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Nested

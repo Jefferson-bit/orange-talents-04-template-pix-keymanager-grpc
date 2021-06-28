@@ -17,7 +17,7 @@ data class ContaResponse(
             agencia = agencia,
             numeroDaConta = this.numero,
             nomeTitular = this.titular.nome,
-            cpfTitular = this.titular.nome)
+            cpfTitular = this.titular.cpf)
     }
 
 }

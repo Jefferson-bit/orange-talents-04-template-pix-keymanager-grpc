@@ -1,10 +1,10 @@
-package br.com.zup.jefferson.chavepix
+package br.com.zup.jefferson.enums
 
 
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator
 import org.hibernate.validator.internal.constraintvalidators.hv.br.CPFValidator
 
-enum class TipoDeChave () {
+enum class TipoDeChave {
 
     CPF {
         override fun validaChave(chavePix: String?): Boolean {
@@ -33,6 +33,7 @@ enum class TipoDeChave () {
             }
         }
     },
+
     NUMERO_CELULAR {
         override fun validaChave(chavePix: String?): Boolean {
             if(chavePix.isNullOrBlank()){
@@ -41,8 +42,9 @@ enum class TipoDeChave () {
             return chavePix.matches("^\\+[1-9][0-9]\\d{1,14}\$".toRegex())
         }
     },
+
     CHAVE_ALEATORIA {
-        override fun validaChave(chavePix: String?): Boolean = chavePix.isNullOrBlank()
+        override fun validaChave(chavePix: String?) = chavePix.isNullOrBlank()
     };
 
     abstract fun validaChave(chavePix: String?) : Boolean
