@@ -53,6 +53,9 @@ dependencies {
     testImplementation("org.mockito:mockito-core:3.11.1")
     testImplementation("io.micronaut.test:micronaut-test-junit5:2.3.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.0")
+
+    testImplementation ("org.hamcrest:hamcrest-all:1.3")
+
     testImplementation("com.h2database:h2")
 }
 

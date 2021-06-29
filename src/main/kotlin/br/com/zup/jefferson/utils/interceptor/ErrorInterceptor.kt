@@ -12,6 +12,7 @@ import io.grpc.stub.StreamObserver
 import io.micronaut.aop.InterceptorBean
 import io.micronaut.aop.MethodInterceptor
 import io.micronaut.aop.MethodInvocationContext
+import java.lang.IllegalArgumentException
 import java.lang.IllegalStateException
 import javax.inject.Singleton
 import javax.validation.ConstraintViolationException
@@ -25,6 +26,8 @@ class ErrorInterceptor : MethodInterceptor<Any, Any>{
              context.proceed()
         }catch (e: Exception){
             val error = when(e){
+                is IllegalArgumentException -> Status.INVALID_ARGUMENT.withCause(e)
+                    .withDescription(e.message).asRuntimeException()
                 is ChavePixNotFoundException -> Status.NOT_FOUND.withCause(e)
                     .withDescription(e.message).asRuntimeException()
                 is IllegalStateException -> Status.FAILED_PRECONDITION.withCause(e)

@@ -14,6 +14,7 @@ class ListaChavesPixService(@Inject val pixRepository: PixRepository) {
 
     fun lista(@NotBlank @ValidUUID idCliente: String?): List<DetalhesChavePixResponse> {
         val uuidCliente = UUID.fromString(idCliente)
+
         return pixRepository.listAllChavePix(idCliente = uuidCliente).map { obj ->
             DetalhesChavePixResponse(obj)
         }
