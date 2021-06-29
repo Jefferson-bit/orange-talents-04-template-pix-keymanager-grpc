@@ -3,6 +3,7 @@ import br.com.zup.jefferson.enums.TipoDeChave
 import br.com.zup.jefferson.enums.TipoDeConta
 import br.com.zup.jefferson.sistemaexterno.CreatePixKeyRequest
 import org.hibernate.annotations.GenericGenerator
+import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
@@ -20,7 +21,7 @@ class ChavePix(
     val tipoDeChave: TipoDeChave?,
     var chavePix: String?,
     @Embedded
-    val conta: Conta
+    val conta: Conta,
 ) {
 
     @Id
@@ -30,6 +31,13 @@ class ChavePix(
 
     fun atualizaChavePix(chavePix: String?){
         this.chavePix = chavePix
+    }
+
+    val criadoEm: LocalDateTime = LocalDateTime.now()
+
+    @PrePersist
+    fun createdAt(){
+        criadoEm
     }
 }
 

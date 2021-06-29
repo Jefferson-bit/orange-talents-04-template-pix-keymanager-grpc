@@ -21,6 +21,10 @@ service ConsultaDadosChavePixService{
   rpc consulta(ConsultaPixRequest) returns (ConsultaPixResponse){}
 }
 
+service ListaChavesPix{
+  rpc lista(ListaChavesPixRequest) returns (ListaChavesPixResponse){}
+}
+
 enum TipoDeChave{
   DESCONHECIDO_CHAVE = 0;
   CPF = 1;
@@ -90,5 +94,21 @@ message ConsultaPixResponse{
   string clienteId = 1;
   string pixId = 2;
   ChavePix chave = 3;
+}
 
+message ListaChavesPixRequest{
+  string idCliente = 1;
+}
+
+message  ListaChavesPixResponse{
+  message ChavesPix{
+    string pixId = 1;
+    TipoDeChave tipoDeChave = 2;
+    string chavePix = 3;
+    TipoDeConta tipoDeConta = 4;
+    google.protobuf.Timestamp createAt = 5;
+  }
+
+  string idCliente = 1;
+  repeated ChavesPix chavesPix =2;
 }

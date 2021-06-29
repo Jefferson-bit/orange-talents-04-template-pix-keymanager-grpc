@@ -3,6 +3,7 @@ package br.com.zup.jefferson.sistemaexterno
 import br.com.zup.jefferson.chavepix.ChavePix
 import br.com.zup.jefferson.chavepix.ChavePixResponse
 import br.com.zup.jefferson.chavepix.Conta
+import br.com.zup.jefferson.chavepix.Instituicoes
 import br.com.zup.jefferson.enums.AccountType
 import br.com.zup.jefferson.enums.KeyType
 import br.com.zup.jefferson.enums.OwnerType
@@ -91,7 +92,7 @@ data class PixKeyDetailsResponse(
                 AccountType.SVGS -> TipoDeConta.CONTA_POUPANCA
             },
             conta = Conta(
-                instituicao = bankAccount.participant,
+                instituicao = Instituicoes.nome(bankAccount.participant),
                 agencia = bankAccount.branch,
                 numeroDaConta = owner.taxIdNumber,
                 nomeTitular = owner.name,

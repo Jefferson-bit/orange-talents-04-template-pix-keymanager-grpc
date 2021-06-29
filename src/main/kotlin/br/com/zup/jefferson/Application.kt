@@ -7,6 +7,5 @@ fun main(args: Array<String>) {
 	    .args(*args)
 		.packages("br.com.zup.jefferson")
 		.start()
-
 }
 
