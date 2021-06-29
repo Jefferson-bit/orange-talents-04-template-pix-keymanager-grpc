@@ -6,11 +6,12 @@ import br.com.zup.jefferson.sistemaexterno.BcbClient
 import br.com.zup.jefferson.utils.exception.ChavePixNotFoundException
 import io.micronaut.core.annotation.Introspected
 import io.micronaut.http.HttpStatus
+import io.micronaut.validation.Validated
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Size
 
 @Introspected
-open class ConsultaChavePorChavePix(
+data class ConsultaChavePorChavePix(
     @field:NotBlank @Size(max = 77) val chave: String,
 ) : ConsultaChave {
     override fun consulta(pixRepository: PixRepository, bcbClient: BcbClient): ChavePixResponse {

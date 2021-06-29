@@ -8,20 +8,21 @@ import com.google.protobuf.Timestamp
 import io.grpc.stub.StreamObserver
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
+import javax.validation.Validator
 
 @InterceptorErrorAdvice
 @Singleton
 class ConsultaChavePixEndpoint(
     @Inject val pixRepository: PixRepository,
-    @Inject val bcbClient: BcbClient
+    @Inject val bcbClient: BcbClient,
+    @Inject val validator: Validator
 ) : ConsultaDadosChavePixServiceGrpc.ConsultaDadosChavePixServiceImplBase(){
 
     override fun consulta(request: ConsultaPixRequest?, responseObserver: StreamObserver<ConsultaPixResponse>?) {
 
-        val request = request!!.toModel()
+        val request = request!!.toModel(validator)
         val serviceResponse = request.consulta(pixRepository = pixRepository, bcbClient = bcbClient)
 
         val instant = LocalDateTime.now().atZone(ZoneId.of("UTC")).toInstant()

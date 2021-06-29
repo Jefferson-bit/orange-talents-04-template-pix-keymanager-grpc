@@ -6,15 +6,15 @@ import br.com.zup.jefferson.sistemaexterno.BcbClient
 import br.com.zup.jefferson.utils.ValidUUID
 import br.com.zup.jefferson.utils.exception.ChavePixNotFoundException
 import io.micronaut.core.annotation.Introspected
+import io.micronaut.validation.Validated
 import java.util.*
 import javax.validation.constraints.NotBlank
 
 @Introspected
-class ConsultaChavePorPixId(
+data class ConsultaChavePorPixId(
     @field:NotBlank  val pixId: String?,
-    @field:NotBlank @ValidUUID val clienteId: String?,
+    @field:NotBlank @field:ValidUUID val clienteId: String?,
 ): ConsultaChave {
-
     override fun consulta(pixRepository: PixRepository, bcbClient: BcbClient): ChavePixResponse {
         val uuidCliente = UUID.fromString(clienteId)
         val chavePix = pixRepository.findByIdClienteAndPixId(idCliente = uuidCliente, pixId = pixId)

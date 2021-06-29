@@ -32,7 +32,7 @@ import java.util.*
 import javax.inject.Inject
 
 @MicronautTest(transactional = false)
-internal class RemoveChavePixEndpointTest(
+internal class RemoveChavePixEndpointTestImpl(
     @Inject val repository: PixRepository,
     @Inject val grpcClientRemove: RemoveChavePixServiceGrpc.RemoveChavePixServiceBlockingStub,
 ) {
