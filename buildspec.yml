@@ -1,6 +1,6 @@
 version: 0.2
 
-phase:
+phases:
   install:
     runtime-versions:
       docker: 18
@@ -22,7 +22,8 @@ phase:
       - echo Building completed on `date`
       - echo Pushing the Docker image...
 
-
 artifacts:
     files:
-      - /build/libs/*
+      - ./build/libs/*
+
+
