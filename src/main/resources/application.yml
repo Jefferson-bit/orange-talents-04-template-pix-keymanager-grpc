@@ -2,21 +2,24 @@ micronaut:
   application:
     name: pix
 
+server:
+  port: '8080'
+
 ##configurando parte client do GRPC
 grpc:
   server:
     port: ${SERVER_PORT:50051}
-    keep-alive-time: 1h
-    max-inbound-message-size: 1024
+    keep-alive-time: ${KEEP_ALIVE_TIME:1h}
+    max-inbound-message-size: ${MAX_INBOUND:1024}
 
 datasources:
   default:
-    url: jdbc:postgresql://localhost:5432/pix
-    driverClassName: org.postgresql.Driver
-    username: postgres
-    password: postgres
+    url: ${BD_URL:jdbc:mysql://localhost:3306/movieflix?createDatabaseIfNotExist=true&useTimezone=true&serverTimezone=UTC}
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: ${BD_USER:root}
+    password: ${BD_PASSWORD:root}
     schema-generate: CREATE_DROP
-    dialect: POSTGRES
+    dialect: MYSQL
 
 jpa:
   default:
@@ -27,7 +30,9 @@ jpa:
         hbm2ddl:
           auto: update
 itau:
-  url: 'http://localhost:9091'
+  url: ${ITAU_URL:'http://localhost:9091'}
 
 bcb:
-  url: 'http://localhost:8082'
+  url: ${BCB_URL:'http://localhost:8082'}
+
+

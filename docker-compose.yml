@@ -1,10 +1,49 @@
-version: '3'
+version: '3.8'
 services:
+
   bcb:
     image: "public.ecr.aws/d8b2x5c9/orange-stack-sat-bcb-pix"
     ports:
-      - 8082:8082
+      - "8082:8082"
   erp-itau:
     image: "public.ecr.aws/d8b2x5c9/orange-stack-sat-itau-erp"
     ports:
-      - 9091:9091
+      - "9091:9091"
+
+  mysql:
+    image: mysql
+    container_name: mysql
+    security_opt:
+      - seccomp:unconfined
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: proposta
+    ports:
+      - '3306:3306'
+    volumes:
+      - mysql-volume:/var/lib/mysql
+
+  pix:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    image: pix
+    container_name: pix
+    environment:
+      BD_URL: jdbc:mysql://mysql:3306/pix?createDatabaseIfNotExist=true&useTimezone=true&serverTimezone=UTC
+      BD_USER: root
+      BD_PASSWORD: root
+      ITAU_URL: http://ecr-itau:9091
+      BCB_URL: http://bcb:8082
+      SERVER_PORT: 50051
+      KEEP_ALIVE_TIME: 1h
+      MAX_INBOUND: 1024
+    ports:
+      - "8080:8080"
+    depends_on:
+      - "mysql"
+      - "erp-itau"
+      - "bcb"
+
+volumes:
+  mysql-volume:
