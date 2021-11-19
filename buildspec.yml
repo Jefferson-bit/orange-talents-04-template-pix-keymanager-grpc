@@ -11,11 +11,11 @@ phases:
   build:
      commands:
        - echo Build started on `date`
-       - gradle clean build -x test
-       - echo clean build sucessfull `date`
        - docker build -t public.ecr.aws/d8b2x5c9/orange-stack-sat-bcb-pix
        - docker build -t public.ecr.aws/d8b2x5c9/orange-stack-sat-itau-erp
        - echo Building the Docker image...
+       - ls build
+       - ls build/libs/
        - sh build.sh
   post_build:
     commands:
@@ -24,6 +24,6 @@ phases:
 
 artifacts:
     files:
-      - ./build/libs/*
+      - build/libs/*
 
 
