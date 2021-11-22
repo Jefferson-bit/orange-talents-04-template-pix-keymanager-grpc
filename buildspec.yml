@@ -11,19 +11,9 @@ phases:
      commands:
        - echo Gradlew Build on `date`
        - java -version
-       - gradle clean build
        - echo Building the Docker image...
        - docker build -t public.ecr.aws/d8b2x5c9/orange-stack-sat-bcb-pix
        - docker build -t public.ecr.aws/d8b2x5c9/orange-stack-sat-itau-erp
   post_build:
     commands:
       - echo Build completed on `date`
-
-artifacts:
-    files:
-      - build/libs/*.jar
-cache:
-  paths:
-    - '/root/.gradle/caches/**/*'
-    - '/root/.gradle/wrapper/**/*'
-
