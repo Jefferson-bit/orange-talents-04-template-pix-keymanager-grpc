@@ -1,5 +1,4 @@
 version: 0.2
-
 phases:
   install:
     runtime-versions:
@@ -14,8 +13,8 @@ phases:
   build:
      commands:
        - echo Build started on `date`
-       - gradle test
-       - gradle build
+       - ./gradlew build --scan
+       - ./gradlew test
        - docker build -t public.ecr.aws/d8b2x5c9/orange-stack-sat-bcb-pix
        - docker build -t public.ecr.aws/d8b2x5c9/orange-stack-sat-itau-erp
        - echo Building the Docker image...
@@ -30,5 +29,8 @@ phases:
 artifacts:
     files:
       - build/libs/*.jar
-
+cache:
+  paths:
+    - '/root/.gradle/caches/**/*'
+    - '/root/.gradle/wrapper/**/*'
 
