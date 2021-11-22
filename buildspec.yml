@@ -4,12 +4,6 @@ phases:
     runtime-versions:
       docker: 18
       java: corretto11
-  pre_build:
-     commands:
-        - mkdir /opt/gradle
-        - unzip -d /opt/gradle gradle-5.6.3-bin.zip
-        - export PATH=$PATH:/opt/gradle/gradle-5.6.3/bin
-        - echo skiped on `date`
   build:
      commands:
        - echo Build started on `date`
@@ -23,8 +17,9 @@ phases:
        - sh build.sh
   post_build:
     commands:
+      - rm -f  /root/.gradle/caches/modules-2/modules-2.lock
+      - rm -fr  /root/.gradle/caches/*/plugin-resolution/
       - echo Building completed on `date`
-      - echo Pushing the Docker image...
 
 artifacts:
     files:
