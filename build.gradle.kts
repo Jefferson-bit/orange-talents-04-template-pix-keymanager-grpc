@@ -62,6 +62,7 @@ dependencies {
 application {
     mainClass.set("br.com.zup.jefferson.ApplicationKt")
 }
+
 java {
     sourceCompatibility = JavaVersion.toVersion("11")
 }
