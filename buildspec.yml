@@ -1,19 +1,21 @@
 version: 0.2
+
 phases:
   install:
     runtime-versions:
-      docker: 18
       java: corretto11
-  pre_build:
-    commands:
-      - echo skipped on `date`
   build:
-     commands:
-       - echo Gradlew Build on `date`
-       - java -version
-       - echo Building the Docker image...
-       - docker build -t public.ecr.aws/d8b2x5c9/orange-stack-sat-bcb-pix
-       - docker build -t public.ecr.aws/d8b2x5c9/orange-stack-sat-itau-erp
-  post_build:
     commands:
-      - echo Build completed on `date`
+      - ./gradlew build --scan
+  post_build:
+    finally:
+      - rm -f  /root/.gradle/caches/modules-2/modules-2.lock
+      - rm -fr /root/.gradle/caches/*/plugin-resolution/
+artifacts:
+  files:
+    - '*-all.jar'
+  base-directory: 'build/libs'
+cache:
+  paths:
+    - '/root/.gradle/caches/**/*'
+    - '/root/.gradle/wrapper/**/*'
