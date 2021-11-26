@@ -3,19 +3,22 @@ version: 0.2
 phases:
   install:
     runtime-versions:
+
       java: corretto11
+  pre_build:
+    commands:
+      - echo Nothing to do in the pre_build phase...
   build:
     commands:
-      - ./gradlew build --scan
+      - echo Build started on `date`
+      - mvn install
+      - echo Instal mvn
+      - gradle install
+      - echo building gradlew
+      - gradle build
   post_build:
-    finally:
-      - rm -f  /root/.gradle/caches/modules-2/modules-2.lock
-      - rm -fr /root/.gradle/caches/*/plugin-resolution/
+    commands:
+      - echo Build completed on `date`
 artifacts:
   files:
-    - '*-all.jar'
-  base-directory: 'build/libs'
-cache:
-  paths:
-    - '/root/.gradle/caches/**/*'
-    - '/root/.gradle/wrapper/**/*'
+    - build/libs/pix-0.1-all.jar
