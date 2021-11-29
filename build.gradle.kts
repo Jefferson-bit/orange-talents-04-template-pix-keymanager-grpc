@@ -13,6 +13,7 @@ version = "0.1"
 group = "br.com.zup.jefferson"
 
 val kotlinVersion= project.properties["kotlinVersion"]
+
 repositories {
     mavenCentral()
 }
