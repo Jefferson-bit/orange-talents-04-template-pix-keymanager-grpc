@@ -14,4 +14,4 @@ phases:
       - echo Build completed on `date`
 artifacts:
   files:
-    - build/libs/pix-0.1-all.jar
+    - build/libs/*.jar
