@@ -2,7 +2,7 @@ import com.google.protobuf.gradle.*
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.4.32"
     id("org.jetbrains.kotlin.kapt") version "1.4.32"
-//    id("com.github.johnrengelman.shadow") version "7.0.0"
+    id("com.github.johnrengelman.shadow") version "7.0.0"
     id("io.micronaut.application") version "1.5.0"
     id("org.jetbrains.kotlin.plugin.allopen") version "1.4.32"
     id("org.jetbrains.kotlin.plugin.jpa") version "1.4.32"
@@ -43,6 +43,11 @@ dependencies {
     implementation("io.micronaut.xml:micronaut-jackson-xml")
     implementation ( "mysql:mysql-connector-java:8.0.27")
     implementation("io.micronaut.sql:micronaut-jdbc-hikari")
+
+    //metrics
+    implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
+    implementation( "io.micronaut:micronaut-management")
+    implementation( "io.micronaut.micrometer:micronaut-micrometer-core")
 
     //test
     testImplementation("io.micronaut:micronaut-http-client")

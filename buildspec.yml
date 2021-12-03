@@ -4,14 +4,22 @@ phases:
   install:
     runtime-versions:
       java: corretto11
+      docker: 18
   build:
     commands:
       - echo Build started on `date`
       - echo building gradle
       - bash ./gradlew build
+      - docker build -t public.ecr.aws/d8b2x5c9/orange-stack-sat-bcb-pix .
+      - docker build -t public.ecr.aws/d8b2x5c9/orange-stack-sat-itau-erp .
   post_build:
     commands:
       - echo Build completed on `date`
 artifacts:
   files:
-    - build/libs/*.jar
+    - build/libs/*
+
+cache:
+  paths:
+    - '/root/.gradle/caches/**/*'
+    - '/root/.gradle/wrapper/**/*'

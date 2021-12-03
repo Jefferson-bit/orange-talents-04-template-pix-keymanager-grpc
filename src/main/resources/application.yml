@@ -1,23 +1,41 @@
 micronaut:
   application:
     name: pix
+  metrics:
+    enable: true
+    export:
+      prometheus:
+        enable: true
+        step: PT1M
+        descriptions: true
 
-server:
-  port: '8080'
+endpoints:
+  prometheus:
+    sensitive: false
+  health:
+    enable: true
+    sensitive: false
+    details-visible:  ANONYMOUS
+    jdbc:
+      enable: true
+    disk-space:
+      enable: true
 
 ##configurando parte client do GRPC
 grpc:
   server:
-    port: ${SERVER_PORT:50051}
-    keep-alive-time: ${KEEP_ALIVE_TIME:1h}
-    max-inbound-message-size: ${MAX_INBOUND:1024}
+    health:
+      enable: true
+    port: ${SERVER_PORT:`50051`}
+    keep-alive-time: ${KEEP_ALIVE_TIME:`1h`}
+    max-inbound-message-size: ${MAX_INBOUND:`1024`}
 
 datasources:
   default:
     url: ${BD_URL:`jdbc:mysql://localhost:3306/pix?createDatabaseIfNotExist=true&useTimezone=true&serverTimezone=UTC`}
     driverClassName: com.mysql.cj.jdbc.Driver
-    username: ${BD_USER:root}
-    password: ${BD_PASSWORD:root}
+    username: ${BD_USER:`root`}
+    password: ${BD_PASSWORD:`root`}
     schema-generate: CREATE_DROP
     dialect: MYSQL
 
@@ -30,9 +48,9 @@ jpa:
         hbm2ddl:
           auto: update
 itau:
-  url: ${ITAU_URL:'http://localhost:9091'}
+  url: ${ITAU_URL:`http://localhost:9091`}
 
 bcb:
-  url: ${BCB_URL:'http://localhost:8082'}
+  url: ${BCB_URL:`http://localhost:8082`}
 
 
