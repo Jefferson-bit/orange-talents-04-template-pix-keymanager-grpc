@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pix-pod
+  labels:
+    app: pix
+spec:
+  containers:
+    - name: pix-pod-container
+      image: crashnight/pix:v1
+      ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 50051
+          name: grpc
+          protocol: TCP
+      envFrom:
+        - configMapRef:
+            name: pix-configmap

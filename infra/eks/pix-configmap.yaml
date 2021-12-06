@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pix-configmap
+data:
+  BD_URL: jdbc:mysql://svc-mysql-clusterip:3306/pix?createDatabaseIfNotExist=true&useTimezone=true&serverTimezone=UTC
+  BD_USER: root
+  BD_PASSWORD: root
+  ITAU_URL: http://itau-svc:9091
+  BCB_URL: http://bcb-svc:8082
+  SERVER_PORT: "50051"
+  KEEP_ALIVE_TIME: 1h
+  MAX_INBOUND: "1024"
