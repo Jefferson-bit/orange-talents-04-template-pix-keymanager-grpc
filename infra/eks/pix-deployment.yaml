@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pix-deployment
+spec:
+  replicas: 3
+  template:
+    metadata:
+      name: pix-deployment
+      labels:
+        app: pix
+    spec:
+      containers:
+        - name: pix-deployment-container
+          image: crashnight/pix:v1
+          ports:
+            - containerPort: 8080
+              name: http
+            - containerPort: 50051
+              name: grpc
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: pix-configmap
+  selector:
+    matchLabels: 
+      app: pix

@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: pix-replicaset
+spec:
+ ##template significa que vamos especificar qual o modelo ou padrão dele. Definimos informações do nosso pod dentro dele
+  template:
+    metadata:
+      name: pix-pod
+      labels:
+        app: pix
+    spec:
+      containers:
+        - name: pix-pod-container
+          image: crashnight/pix:v1
+          ports:
+            - containerPort: 8080
+              name: http
+            - containerPort: 50051
+              name: grpc
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+            name: pix-configmap
+  replicas: 3
+  ##o replicaset não sabe qual template gerencia, então precisamos definir a label do nosso pod
+  selector:
+    matchLabels:
+      app: pix

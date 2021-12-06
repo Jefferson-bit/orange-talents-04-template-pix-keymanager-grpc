@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: mysql-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: mysql-deployment
+      labels:
+        mysql: db-pix
+    spec:
+      containers:
+        - name: mysql-deployment-container
+          image: mysql:latest
+          ports:
+            - containerPort: 3306
+          envFrom:
+            - configMapRef:
+                name: db-configmap
+  selector:
+    matchLabels:
+      mysql: db-pix           
