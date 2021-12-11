@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: pix-statefulset
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels: 
+        app: pix
+      name: pix-pod
+    spec:
+      containers:
+      - name: pix-container
+        image: crashnight/pix:v1
+        ports:
+          - containerPort: 8080
+        envFrom:
+          - configMapRef:
+              name: pix-configmap
+        volumeMounts:
+          - name: "nome do seu volume"
+            mountPath: /var/www/html/"nomedapasta"
+          - name: "nome do seu volume"
+            mountPath: /var/www/html/"nomedapasta"
+      volumes:
+         - name: "nomedovolume"
+          persistentVolumeClaim:
+            claimName: "nomedoclaim"
+        - name: "nomedovolume"
+          persistentVolumeClaim:
+            claimName: "nomedoclaim"
+  selector:
+    matchLabels:  
+      app: pix
+  serviceName: pix-svc
+

@@ -20,7 +20,7 @@ spec:
               name: grpc
               protocol: TCP
           envFrom:
-            - configMapRef:
+            - configMapRef:  
                 name: pix-configmap
   selector:
     matchLabels: 
