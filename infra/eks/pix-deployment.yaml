@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: pix-deployment
 spec:
-  replicas: 3
+  replicas: 1
   template:
     metadata:
       name: pix-deployment
@@ -22,6 +22,28 @@ spec:
           envFrom:
             - configMapRef:  
                 name: pix-configmap
+          ## isso signifca que se ele não consegui executar esse teste aqui, ele reinicia a aplicação
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+          ## periodSecondes: é pra dizer que : a cada quantos segundo eu quero fazer esse teste.
+            periodSeconds: 10
+          ## quantas tentativas queremos pra tentar subi novamente o container?
+            failureThreshold: 3
+          ## qual o momento ele vai começar a executar os teste?
+            initialDelaySeconds: 20
+          ## aqui é diferente. Se ele não consegui executar esse failure Threshold no determinado número q foi definido, ele passa a enviar, ele n reinicia a aplicação.
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 10
+            failureThreshold: 5
+            initialDelaySeconds: 3
+          resources:
+            requests:
+              cpu: 10m
   selector:
     matchLabels: 
       app: pix
